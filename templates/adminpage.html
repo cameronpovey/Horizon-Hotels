@@ -1,0 +1,88 @@
+<!--
+    Website Development and Databases
+    Horizon Hotels
+    Cameron Povey
+    21011010
+-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Horizon Hotels</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://use.typekit.net/mtv8kua.css">
+        <link rel="icon" href="../static/css/media/favicon.png">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script rel="text/javascript" src="{{ url_for('static', filename='admin.js') }}"></script>
+        <script>
+            {% if 'adfetchdata' in session %}
+                bookid = ('{{ session.adbook[0] }}')
+            {% else %}
+                bookid = null
+            {% endif %}
+            {% if 'adfetchuserdata' in session %}
+                userid = ('{{ session.aduser[0] }}')
+            {% else %}
+                userid = null
+            {% endif %}
+        </script>
+    </head>
+    <body onload="onload()">
+        <div class="background jumbotron text-center w-100 p-3">
+            <div class="jumbotron text-center">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='css/media/HH-logo.png') }}" class="logo-icon" alt="Horizon Hotels">
+                </a>
+            </div>
+        </div>
+        <div class="text-center">
+            <div class="bg-dark text-white p-3">
+                <h1>Admin</h1>
+            </div>
+            <p>Total bookings: {{ session.admincount }}</p>
+            <label>Get Booking ID:</label>
+            <input type="number" onchange="bookchange(this.value)" value="Enter ID" min="1" id="changebookid">
+            <br>
+            <a role="button" class="btn btn-primary" href="" id="findbook">Find this booking info</a>
+        </div>
+        <br>
+        <div class="text-center">
+            <p>Total Users: {{ session.admincountusers }}</p>
+            <label>Get User ID:</label>
+            <input type="number" onchange="userchange(this.value)" value="Enter ID" min="1" id="changeuserid">
+            <br>
+            <a role="button" class="btn btn-primary" href="" id="finduser">Find this user info</a>
+        </div>
+
+        {% if 'adfetchuserdata' in session  %}
+        <div>
+            <p>User: {{ session.aduser[0] }}</p>
+            <p>Name: {{ session.aduser[1] }}</p>
+            <p>Last: {{ session.aduser[2] }}</p>
+            <p>Email: {{ session.aduser[3] }}</p>
+            <p>Bookings: {{ session.aduserbookings }}</p>
+
+
+            <a role="button" class="btn btn-danger" href="" id="revuser">Remove this</a>
+            <a role="button" class="btn btn-primary" href="/admin/clear/0" id="clearuser">Clear Search</a>
+        </div>
+        {% endif %}
+        {% if 'adfetchdata' in session  %}
+        <div>
+            <p>Booking ID: {{ session.adbook[0] }}</p>
+            <p>User ID: {{ session.adbook[1] }}</p>
+            <p>Hotel ID: {{ session.adbook[2] }}</p>
+            <p>(ID, Sandard, Standard Double, Double, Family): {{ session.adacc }}</p>
+            <p>People: {{ session.adinfo[2] }}</p>
+            <p>Start: {{ session.adinfo[3] }}</p>
+            <p>End: {{ session.adinfo[4] }}</p>
+            <p>Cost: {{ session.adinfo[6] }} {{ session.adinfo[5] }}</p>
+            <a role="button" class="btn btn-danger" href="" id="revbook">Remove this</a>
+            <a role="button" class="btn btn-primary" href="" id="clearbook">Clear Search</a>
+        </div>
+        {% endif %}
+            
+    </body>
+</html>

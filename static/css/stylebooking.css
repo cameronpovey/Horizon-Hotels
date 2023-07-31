@@ -1,0 +1,32 @@
+* {
+    font-family: niveau-grotesk,sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    box-sizing: border-box;
+  }
+
+@keyframes imhov {
+    from {opacity: 100%;}
+    to {opacity: 50%;}
+}
+@keyframes imhovrev { /*EASIER WAY TO REVERSE!*/
+    from {opacity: 50%;}
+    to {opacity: 100%;}
+}
+
+.background { 
+    background-image: url(media/backgroundblue1.png);
+    color: black;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.card-img-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-icon {
+    height: 10vw;
+}

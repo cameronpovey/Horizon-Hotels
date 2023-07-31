@@ -1,0 +1,361 @@
+<!--
+    Website Development and Databases
+    Horizon Hotels
+    Cameron Povey
+    21011010
+-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Horizon Hotels</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://use.typekit.net/mtv8kua.css">
+        <link rel="icon" type="image/x-icon" href="../static/css/media/favicon.png">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script rel="text/javascript" src="{{ url_for('static', filename='home.js') }}"></script>
+        <meta name="description" content="Landing and home page for horizon hotels">
+    </head>
+    <body onload="onload()">
+        <div class="background jumbotron text-center w-100">
+            <div class="jumbotron text-center p-3">
+                <a href="/">
+                <img alt="Logo" src="{{ url_for('static', filename='css/media/HH-logo.png') }}" class="logo-icon" alt="Horizon Hotels">
+                </a>
+            </div>
+            {% if 'loginid' in session %}
+            <div class="jumbotron text-center p-2">
+                Welcome, {{ session.loginid }}
+            </div>
+            <div class="row row-cols-1 row-cols-sm-2 w-100 g-0">
+                <div class="col border-white border-end border-end-2">
+                    <a href="myuser" class="btn bg-dark text-white container-fluid rounded-0 border-0" role="button">
+                        My Account
+                    </a>
+                </div>
+                <div class="col border-white border-start border-start-2">
+                    <a href="logout" class="btn bg-dark text-white container-fluid rounded-0 border-0" role="button">
+                        Logout
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <a href="account" class="btn bg-dark text-white container-fluid rounded-0" role="button">
+                Log in
+            </a>
+            {% endif %}
+            
+            <div class="jumbotron text-center p-5" id="form">
+                <form name="book" method="post" action="/book">
+                    <div class="shadow container bg-white p-3 rounded-3">
+                        <div class="row row-cols-1 row-cols-sm-3">
+                            <div class="col">
+                                <form-group>
+                                    <label>Location</label>
+                                    <select onchange="changeback(value)" class="form-control" id="locationSel" name="hotel">
+                                        <option value="0">Aberdeen</option>
+                                        <option value="1">Belfast</option>
+                                        <option value="2">Birmingham</option>
+                                        <option value="3">Bristol</option>
+                                        <option value="4">Cardiff</option>
+                                        <option value="5">Edinburgh</option>
+                                        <option value="6">Glasgow</option>
+                                        <option value="7">London</option>
+                                        <option value="8">Manchester</option>
+                                        <option value="9">Newcastle</option>
+                                        <option value="10">Norwich</option>
+                                        <option value="11">Nottingham</option>
+                                        <option value="12">Oxford</option>
+                                        <option value="13">Plymouth</option>
+                                        <option value="14">Swansea</option>
+                                    </select>
+                                </form-group>
+                            </div>
+                            <div class="col">
+                                <form-group class="text-center w-50">
+                                    <label>Select amount of nights</label>
+                                    <select class="form-control text-center" onchange="datestart(null)" id="nightSel" name="nights" required>
+                                        <option value="1">1 Night</option>
+                                        <option value="2">2 Nights</option>
+                                        <option value="3">3 Nights</option>
+                                        <option value="4">4 Nights</option>
+                                        <option value="5">5 Nights</option>
+                                        <option value="6">6 Nights</option>
+                                        <option value="7">7 Nights</option>
+                                        <option value="8">8 Nights</option>
+                                        <option value="9">9 Nights</option>
+                                        <option value="10">10 Nights</option>
+                                        <option value="11">11 Nights</option>
+                                        <option value="12">12 Nights</option>
+                                        <option value="13">13 Nights</option>
+                                        <option value="14">14 Nights</option>
+                                    </select>
+                                </form-group>
+                            </div>
+                            <div class="col">
+                                <form-group>
+                                    <label>People</label>
+                                    <select class="form-control" id="roomSel" name="people">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                    </select>
+                                </form-group>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="row d-flex justify-content-center p-2">
+                                <form-group class="text-center w-50">
+                                    <label>Select start date</label>
+                                    <input onchange="datestart(value)" type="date" class="form-control text-center" id="dateSelSta" name="startDate" value="" required>
+                                </form-group>
+                            </div>
+                            <label>Checkout Date:</label>
+                            <div id="outDate">ERROR_VALUE</div>
+                        </div>
+                        <div id="submit" class="container p-3 pb-0">
+                            {% if 'loginid' in session %}
+                                <button type="submit" class="btn btn-primary" id="book">Book your dream hotel</button>
+                            {% else %}
+                            {% endif %}
+                        </div>
+                        {% if 'loginid' in session %}
+                        {% else %}
+                        <a role="button" class="btn btn-primary" href="/account">Book your dream hotel</a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="Location"class="text-center p-4">
+            <h3>About our destinations</h3>
+            <p>Click for more info!</p>
+        </div>
+
+        <div class="container-fluid">
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-l-4 row-cols-xl-5 g-0">
+                
+                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#infomodal" onclick="modaltitle(0)">
+                    <div class="col">
+                        <div class="card">
+                            <img alt="Aberdeen" src="{{ url_for('static', filename='css/media/aberdeen.jpg') }}" class="image rounded-3" style="width:100%">
+                            <div class="card-img-overlay">
+                                <p class="bg-white p-1 px-2 rounded-3">Aberdeen</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+
+                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#infomodal" onclick="modaltitle(1)">
+                    <div class="col">
+                        <div class="card">
+                            <img alt="Belfast" src="{{ url_for('static', filename='css/media/belfast.jpg')}}" class="image rounded-3" style="width:100%">
+                            <div class="card-img-overlay">
+                                <p class="bg-white p-1 px-2 rounded-3">Belfast</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#infomodal" onclick="modaltitle(2)">
+                    <div class="col">
+                        <div class="card">
+                            <img alt="Birmingham" src="{{ url_for('static', filename='css/media/birmingham.jpg')}}" class="image rounded-3" style="width:100%">
+                            <div class="card-img-overlay">
+                                <p class="bg-white p-1 px-2 rounded-3">Birmingham</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#infomodal" onclick="modaltitle(3)">
+                    <div class="col">
+                        <div class="card">
+                            <img alt="Bristol" src="{{ url_for('static', filename='css/media/bristol.jpg')}}" class="image rounded-3" style="width:100%">
+                            <div class="card-img-overlay">
+                                <p class="bg-white p-1 px-2 rounded-3">Bristol</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#infomodal" onclick="modaltitle(4)">
+                    <div class="col">
+                        <div class="card">
+                            <img alt="Cardiff" src="{{ url_for('static', filename='css/media/cardiff.jpg')}}" class="image rounded-3" style="width:100%">
+                            <div class="card-img-overlay">
+                                <p class="bg-white p-1 px-2 rounded-3">Cardiff</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#infomodal" onclick="modaltitle(5)">
+                    <div class="col">
+                        <div class="card">
+                            <img alt="Edinburgh" src="{{ url_for('static', filename='css/media/edinburgh.jpg')}}" class="image rounded-3" style="width:100%">
+                            <div class="card-img-overlay">
+                                <p class="bg-white p-1 px-2 rounded-3">Edinburgh</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#infomodal" onclick="modaltitle(6)">
+                    <div class="col">
+                        <div class="card">
+                            <img alt="Glasgow" src="{{ url_for('static', filename='css/media/glasgow.jpg')}}" class="image rounded-3" style="width:100%">
+                            <div class="card-img-overlay">
+                                <p class="bg-white p-1 px-2 rounded-3">Glasgow</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#infomodal" onclick="modaltitle(7)">
+                    <div class="col">
+                        <div class="card">
+                            <img alt="London" src="{{ url_for('static', filename='css/media/london.jpg')}}" class="image rounded-3" style="width:100%">
+                            <div class="card-img-overlay">
+                                <p class="bg-white p-1 px-2 rounded-3">London</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#infomodal" onclick="modaltitle(8)">
+                    <div class="col">
+                        <div class="card">
+                            <img alt="Manchester" src="{{ url_for('static', filename='css/media/manchester.jpg')}}" class="image rounded-3" style="width:100%">
+                            <div class="card-img-overlay">
+                                <p class="bg-white p-1 px-2 rounded-3">Manchester</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#infomodal" onclick="modaltitle(9)">
+                    <div class="col">
+                        <div class="card">
+                            <img alt="Newcastle" src="{{ url_for('static', filename='css/media/newcastle.jpg')}}" class="image rounded-3" style="width:100%">
+                            <div class="card-img-overlay">
+                                <p class="bg-white p-1 px-2 rounded-3">Newcastle</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#infomodal" onclick="modaltitle(10)">
+                    <div class="col">
+                        <div class="card">
+                            <img alt="Norwich" src="{{ url_for('static', filename='css/media/norwich.jpg')}}" class="image rounded-3" style="width:100%">
+                            <div class="card-img-overlay">
+                                <p class="bg-white p-1 px-2 rounded-3">Norwich</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#infomodal" onclick="modaltitle(11)">
+                    <div class="col">
+                        <div class="card">
+                            <img alt="Nottingham" src="{{ url_for('static', filename='css/media/nottingham.jpg')}}" class="image rounded-3" style="width:100%">
+                            <div class="card-img-overlay">
+                                <p class="bg-white p-1 px-2 rounded-3">Nottingham</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#infomodal" onclick="modaltitle(12)">
+                    <div class="col">
+                        <div class="card">
+                            <img alt="Oxford" src="{{ url_for('static', filename='css/media/oxford.jpg')}}" class="image rounded-3" style="width:100%">
+                            <div class="card-img-overlay">
+                                <p class="bg-white p-1 px-2 rounded-3">Oxford</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#infomodal" onclick="modaltitle(13)">
+                    <div class="col">
+                        <div class="card">
+                            <img alt="Plymouth" src="{{ url_for('static', filename='css/media/plymouth.jpg')}}" class="image rounded-3" style="width:100%">
+                            <div class="card-img-overlay">
+                                <p class="bg-white p-1 px-2 rounded-3">Plymouth</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+                <button type="button" class="btn p-0" data-bs-toggle="modal" data-bs-target="#infomodal" onclick="modaltitle(14)">
+                    <div class="col">
+                        <div class="card">
+                            <img alt="Swansea" src="{{ url_for('static', filename='css/media/swansea.jpg')}}" class="image rounded-3" style="width:100%">
+                            <div class="card-img-overlay">
+                                <p class="bg-white p-1 px-2 rounded-3">Swansea</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </div>
+        <div class="pt-3">
+            <div class="bg-dark text-white jumbotron text-center w-100 p-4">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-0">
+                    <div class="col">
+                        <a href="aboutus" class="btn bg-dark text-white container-fluid rounded-0 border-0" role="button">About Horizon Hotels</a>
+                    </div>
+                    <div class="col">
+                        <a href="pripol" class="btn bg-dark text-white container-fluid rounded-0 border-0" role="button">Privacy Policy and Terms of Service</a>
+                    </div>
+                    <div class="col">
+                        <a href="credit" class="btn bg-dark text-white container-fluid rounded-0 border-0" role="button">Images used</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" id="cookiemodal">
+            <div class="modal-dialog text-center">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Horizon Hotels uses cookies</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>We use cookies within our website to create the most convienient booking experience for you. By using this site and acknowledging this message you agree to our <a href="/pripol">Privacy Policy and Terms of Service</a></p>
+                    </div>
+                    <div class="modal-footer">
+                        <a role="button" class="btn btn-primary" href="/cookietrue">Understood</a>
+                        <a role="button" class="btn btn-secondary" href="https://www.google.com">Decline</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" id="infomodal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title w-100 text-center" id="modalh">ERROR_MODAL_TITLE</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div>
+                        <img alt="Background" id="modalimg" class="img-fluid" src="{{ url_for('static', filename='css/media/backgroundblue1.png')}}">
+                    </div>
+                    <div class="modal-body" id="modaldesc">
+                        ERROR_MODAL_DESC
+                    </div>
+                    <div class="modal-footer">
+                        <a href="ERROR_MODAL_LINK" role="button" class="btn btn-primary w-100" id="modalbutton" target="_blank" rel="noopener noreferrer">ERROR_MODAL_BUTTON</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            if (("{{ session.cookie }}") != 'True'){
+                var myModal = new bootstrap.Modal(document.getElementById('cookiemodal'), {})
+                myModal.show()
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,239 @@
+<!--
+    Website Development and Databases
+    Horizon Hotels
+    Cameron Povey
+    21011010
+-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Horizon Hotels</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://use.typekit.net/mtv8kua.css">
+        <link rel="icon" href="../static/css/media/favicon.png">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script rel="text/javascript" src="{{ url_for('static', filename='mybookings.js') }}"></script>
+        <script>
+            x=-1
+            
+            {% for i in range(session.nobooks): %}
+                x=x+1
+                bookingID[x] = "{{ session.bookings[i][0] }}";
+                hotelID[x] = "{{ session.bookings[i][2] }}";
+                orderDate[x] = ("{{ session.orderDate[i] }}");
+                startDate[x] = ("{{ session.startDate[i] }}");
+                endDate[x] = ("{{ session.endDate[i] }}");
+                people[x] = ("{{ session.info[i][2] }}");
+                curr[x] = ("{{ session.info[i][5] }}");
+                cost[x] = ("{{ session.info[i][6] }}");
+                standard[x] = ("{{ session.rooms[i][1] }}");
+                standou[x] = ("{{ session.rooms[i][2] }}");
+                double[x] = ("{{ session.rooms[i][3] }}");
+                family[x] = ("{{ session.rooms[i][4] }}");
+            {% endfor %}
+        </script>
+    </head>
+    <body onload="onload(bookingID,hotelID)">
+        <div class="background jumbotron text-center w-100">
+            <div class="jumbotron text-center p-3">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='css/media/HH-logo.png') }}" class="logo-icon" alt="Horizon Hotels">
+                </a>
+            </div>
+            <div class="jumbotron text-center p-2">
+                <h1>Welcome, {{ session.loginid }}</h1>
+            </div>
+            <div class="w-100 g-0">
+                <a href="logout" class="btn bg-dark text-white container-fluid rounded-0 border-0" role="button">
+                    Logout
+                </a>
+            </div>
+            <div class="w-100 g-0 border-white border-top border-top-2">
+                <a href="changeinfo" class="btn bg-dark text-white container-fluid rounded-0 border-0" role="button">
+                    Change Account info
+                </a>
+            </div>
+        </div>
+        <h1 class="background text-center p-5">Your Bookings</h1>
+        {% for i in range(session.nobooks): %}
+            <button type="button" class="btn p-0 w-100" data-bs-toggle="modal" id="{{i}}" data-bs-target="#infomodal" onclick="bookingmodal(this.id,bookingID,hotelID,orderDate,startDate,endDate,people,curr,cost,standard,standou,double,family)">
+                <div class="jumbotron text-center p-5" id="location{{i}}" style="background-position: center;">
+                    <div class="shadow container bg-white rounded-3">
+                        <div class="text-center p-3">
+                            <h1 id="postcard{{i}}">Send us a post card from ERROR_PLACE</h1>
+                            <p id="postbook{{i}}">Booking number: #ERROR_BOOKING_NO</p>
+                        </div>
+                    </div>
+                </div>
+            </button>
+        {% endfor %}
+        <div class="modal-dialog fade modal-xl" role="dialog" id=booking>
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    ...
+                </div>
+            </div>
+        </div>       
+        <div class="modal fade" id="infomodal">
+            <div class="modal-dialog modal-fullscreen modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header flex-column " id="modalheader">
+                        <div class="shadow bg-white">
+                            <div class="text-center p-3">
+                                <h5 class="modal-title" id="modalh">Your ERROR_PLACE_MODAL booking </h5>
+                                <p class="" id="modalp">Booking Number: ERROR_BOOKING_NO</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body" id="modaldesc">
+                        <div class="p-1 text-center" id="details">
+                            <h1>Your order details</h1>
+                            <div class="container">
+                                <div class="row d-flex justify-content-center">
+                                    <table class="table w-50">
+                                        <tbody>
+                                            <tr class="text-center">
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label class="p-1">People</label>
+                                                    </div>
+                                                </td>
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label id="people" class="p-1">ERROR_PEOPLE</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr class="text-center">
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label class="p-1">Standard Rooms</label>
+                                                    </div>
+                                                </td>
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label id="standard" class="p-1">ERROR_START</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label class="p-1">Standard Double Rooms</label>
+                                                    </div>
+                                                </td>
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label id="standou" class="p-1">ERROR_START</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label class="p-1">Double Rooms</label>
+                                                    </div>
+                                                </td>
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label id="double" class="p-1">ERROR_START</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label class="p-1">Family Rooms</label>
+                                                    </div>
+                                                </td>
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label id="family" class="p-1">ERROR_START</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr class="text-center">
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label class="p-1">Start Date</label>
+                                                    </div>
+                                                </td>
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label id="startDate" class="p-1">ERROR_START</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label class="p-1">End Date</label>
+                                                    </div>
+                                                </td>
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label id="endDate" class="p-1">ERROR_END</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label class="p-1">Order Date</label>
+                                                    </div>
+                                                </td>
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label id="orderDate" class="p-1">ERROR_ORDER</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label class="p-1">Cost</label>
+                                                    </div>
+                                                </td>
+                                                <td class="h-100">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <label id="cost" class="p-1">ERROR_COST</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-1 text-center" style="display: none;" id="cancelmod">
+                            <div class="alert alert-danger" role="alert">
+                                <h4 class="alert-heading">Refund cancellation</h4>
+                                <ul class="list-group text-start ps-3">
+                                    <li class="list-group-item-danger">Booking before 60 days of booking start date will cause a full refund</li>
+                                    <li class="list-group-item-danger">Booking between 30 and 60 days of booking start date will return 50% of booking price</li>
+                                    <li class="list-group-item-danger">If cancelled within 30 days of the booking start date will charge the full booking price</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="alert" role="alert" id="info">
+                                    <h4 class="alert-heading" id="adv">ERROR</h4>
+                                    <p id="para">ERROR_EXPLANATION</p>
+                                </div>
+                            </div>
+                            <a role="button" class="btn btn-info w-100" href="/cancel/ERROR" id="confirm"><h3 class="p-3">Click here to cancel your booking</h3></a>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary w-100" id="canbook" onclick="cancel(bookingID,hotelID,orderDate,startDate,endDate,people,curr,cost,standard,standou,double,family)">Cancel my booking</button>
+                        <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal" onclick="reset()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
